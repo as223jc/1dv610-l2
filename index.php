@@ -9,6 +9,7 @@ require_once('view/LoginView.php');
 require_once('view/DateTimeView.php');
 require_once('view/LayoutView.php');
 
+die(var_dump($_ENV));
 $DB_HOST = "mysql:host=127.0.0.1;dbname=1dv610-l2";
 $DB_USER = "root";
 $DB_PASSWORD = "roooooot";
