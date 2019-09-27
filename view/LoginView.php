@@ -46,9 +46,7 @@ class LoginView {
      */
     private function generateRegisterButtonHTML() {
         return '
-			<form  method="post" >
-				<button name="' . self::$registerButton . '" value="true">Register a new user</button>
-			</form>
+			<a href="?register">Register a new user</a>
 		';
     }
 
