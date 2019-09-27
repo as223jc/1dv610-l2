@@ -21,7 +21,7 @@ $DB_DATABASE = $_ENV['db_database'];
 $DB_USER = $_ENV['db_user'];
 $DB_PASSWORD = $_ENV['db_password'];
 
-die(var_dump($_ENV));
+//die(var_dump($_ENV));
 
 $DB_CONNECTION = new PDO("mysql:host=$DB_HOST;dbname=$DB_DATABASE", $DB_USER, $DB_PASSWORD);
 
