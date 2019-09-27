@@ -2,8 +2,6 @@
 
 session_start();
 
-var_dump($_SESSION);
-
 //INCLUDE THE FILES NEEDED...
 require_once('model/User.php');
 require_once('controller/UserController.php');
@@ -51,7 +49,6 @@ if (!empty($_POST['LoginView::Logout'])) {
 
 $bRegister = isset($_POST['RegisterView::Register']) || isset($_POST['LoginView::RegisterButton']);
 
-echo ($_SESSION['success'] ?? '');
 $lv->render($bIsLoggedIn, $v, $dtv, $rv,$_SESSION['error'] ?? $_SESSION['success'] ?? '', $bRegister);
 
 $_SESSION['error'] = '';
