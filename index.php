@@ -36,9 +36,9 @@ $lv = new LayoutView();
 
 $oUserController = new UserController($DB_CONNECTION);
 
-if (!empty($_POST['LoginView::Logout'])) {
+if (isset($_POST['LoginView::Logout'])) {
     $oUserController->logout();
-} else if (!empty($_POST['LoginView::Login'])) {
+} else if (isset($_POST['LoginView::Login'])) {
     $oUserController->login(isset($_POST['LoginView::KeepMeLoggedIn']));
 } else if (!empty($_POST['RegisterView::Register'])) {
     $oUserController->register();
@@ -48,7 +48,7 @@ $bIsLoggedIn = !empty($_SESSION['loggedIn']) && $_SESSION['loggedIn'] === true;
 $bRegister = isset($_POST['RegisterView::Register']) || isset($_POST['LoginView::RegisterButton']);
 
 $tMessage = !empty($_SESSION['error']) ? $_SESSION['error'] :
-    (!empty($_SESSION['success']) ? $_SESSION['success'] : 'asd');
+    (!empty($_SESSION['success']) ? $_SESSION['success'] : '');
 
 $lv->render($bIsLoggedIn, $v, $dtv, $rv, $tMessage, $bRegister);
 
