@@ -38,12 +38,12 @@ $oUserController = new UserController($DB_CONNECTION);
 
 if (isset($_POST['LoginView::Logout'])) {
     $oUserController->logout();
-    header('location: index.php');
-    exit;
+//    header('location: index.php');
+//    exit;
 } else if (isset($_POST['LoginView::Login'])) {
     $oUserController->login(isset($_POST['LoginView::KeepMeLoggedIn']));
-    header('location: index.php');
-    exit;
+//    header('location: index.php');
+//    exit;
 } else if (isset($_POST['RegisterView::Register'])) {
     $oUserController->register();
 }
