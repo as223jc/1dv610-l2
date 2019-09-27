@@ -10,24 +10,20 @@ class UserController {
     }
 
     public function login($bRememberMe) {
-        $_SESSION['error'] = '';
         $tUsername = $_POST['LoginView::UserName'] ?? '';
         $tPassword = $_POST['LoginView::Password'] ?? '';
 
         if (empty(trim($tUsername))) {
-            $_SESSION['error'] .= 'Username is missing<br>';
-        }
-
-        if (empty(trim($tPassword))) {
-            $_SESSION['error'] .= 'Password is missing<br>';
-        }
-
-        if (!empty($_SESSION['error'])) {
+            $_SESSION['error'] = 'Username is missing<br>';
+            return;
+        } else if (empty(trim($tPassword))) {
+            $_SESSION['error'] = 'Password is missing<br>';
             return;
         }
 
         if ($this->userAuthenticated($tUsername, $tPassword)) {
             $_SESSION['loggedIn'] = true;
+            $_SESSION['success'] = "Welcome";
 
             if ($bRememberMe) {
                 setcookie( 'rememberMe', true, time() + 3600 * 24 * 30 );
@@ -35,26 +31,21 @@ class UserController {
 
             header("location: index.php");
         } else {
-            $_SESSION['error'] .= 'Wrong name or password<br>';
+            $_SESSION['error'] = 'Wrong name or password<br>';
         }
     }
 
     public function register() {
-        $_SESSION['error'] = '';
         $tUsername = $_POST['RegisterView::UserName'] ?? '';
         $tPassword1 = $_POST['RegisterView::Password'] ?? '';
         $tPassword2 = $_POST['RegisterView::PasswordRepeat'] ?? '';
 
         if (empty(trim($tUsername))) {
-            $_SESSION['error'] .= 'Username is missing<br>';
-        }
-
-        if (empty(trim($tPassword1)) && empty(trim($tPassword2))) {
-            $_SESSION['error'] .= 'Password is missing<br>';
-        }
-
-        if (!($tPassword1 === $tPassword2)) {
-            $_SESSION['error'] .= 'Passwords do not match<br>';
+            $_SESSION['error'] = 'Username is missing<br>';
+        } else if (empty(trim($tPassword1)) && empty(trim($tPassword2))) {
+            $_SESSION['error'] = 'Password is missing<br>';
+        } else if (!($tPassword1 === $tPassword2)) {
+            $_SESSION['error'] = 'Passwords do not match<br>';
         }
 
         if (!empty($_SESSION['error'])) {
