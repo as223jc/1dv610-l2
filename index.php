@@ -40,7 +40,7 @@ if (isset($_POST['LoginView::Logout'])) {
     $oUserController->logout();
 } else if (isset($_POST['LoginView::Login'])) {
     $oUserController->login(isset($_POST['LoginView::KeepMeLoggedIn']));
-} else if (!empty($_POST['RegisterView::Register'])) {
+} else if (isset($_POST['RegisterView::Register'])) {
     $oUserController->register();
 }
 
