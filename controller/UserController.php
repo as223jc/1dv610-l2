@@ -23,11 +23,12 @@ class UserController {
 
         if ($this->userAuthenticated($tUsername, $tPassword)) {
             $_SESSION['loggedIn'] = true;
-            $_SESSION['error'] = "Welcome";
+            $_SESSION['success'] = "Welcome";
 
             if ($bRememberMe) {
                 setcookie( 'rememberMe', true, time() + 3600 * 24 * 30 );
             }
+
         } else {
             $_SESSION['error'] = 'Wrong name or password<br>';
         }
@@ -38,13 +39,11 @@ class UserController {
         $tPassword1 = $_POST['RegisterView::Password'] ?? '';
         $tPassword2 = $_POST['RegisterView::PasswordRepeat'] ?? '';
 
-        if (empty(trim($tUsername) || strlen($tUsername) < 3)) {
+        if (empty(trim($tUsername)) || strlen($tUsername) < 3) {
             $_SESSION['error'] = 'Username has too few characters, at least 3 characters.';
-        } else if (!preg_match('/[^A-Za-z$]/', $tUsername)) {
+        } else if (!preg_match('/[A-Za-z]/', $tUsername)) {
             $_SESSION['error'] = 'Username contains invalid characters.';
-        }  else if (empty(trim($tPassword1)) && empty(trim($tPassword2))) {
-            $_SESSION['error'] = 'Password is missing.';
-        } else if (strlen($tPassword1) < 6) {
+        }  else if (empty(trim($tPassword1)) && empty(trim($tPassword2)) || strlen($tPassword1) < 6) {
             $_SESSION['error'] = 'Password has too few characters, at least 6 characters.';
         } else if (!($tPassword1 === $tPassword2)) {
             $_SESSION['error'] = 'Passwords do not match.';

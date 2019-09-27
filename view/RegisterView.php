@@ -27,7 +27,7 @@ class RegisterView {
 	* @return  String
 	*/
 	private function generateBackToLoginButtonHTML($message) {
-		return '<a href="/">Back to login</a>';
+		return '<a href=".">Back to login</a>';
 	}
 
 	/**
