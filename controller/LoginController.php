@@ -15,11 +15,11 @@ class LoginController {
         $tPassword = $_POST['LoginView::Password'] ?? '';
 
         if (empty(trim($tUsername))) {
-            $_SESSION['error'] .= 'Username cannot be empty<br>';
+            $_SESSION['error'] .= 'Username is missing<br>';
         }
 
         if (empty(trim($tPassword))) {
-            $_SESSION['error'] .= 'Password cannot be empty<br>';
+            $_SESSION['error'] .= 'Password is missing<br>';
         }
 
         if (!empty($_SESSION['error'])) {
@@ -35,7 +35,7 @@ class LoginController {
 
             header("location: index.php");
         } else {
-            $_SESSION['error'] .= 'Wrong username or password<br>';
+            $_SESSION['error'] .= 'Wrong name or password<br>';
         }
     }
 
@@ -46,15 +46,15 @@ class LoginController {
         $tPassword2 = $_POST['LoginView::newPassword2'] ?? '';
 
         if (empty(trim($tUsername))) {
-            $_SESSION['error'] .= 'Username cannot be empty<br>';
+            $_SESSION['error'] .= 'Username is missing<br>';
         }
 
         if (empty(trim($tPassword1)) || empty(trim($tPassword2))) {
-            $_SESSION['error'] .= 'Password cannot be empty<br>';
+            $_SESSION['error'] .= 'Password is missing<br>';
         }
 
         if (!($tPassword1 === $tPassword2)) {
-            $_SESSION['error'] .= 'Passwords do not match<br>';
+            $_SESSION['error'] .= 'Wrong name or password<br>';
         }
 
         if (!empty($_SESSION['error'])) {
