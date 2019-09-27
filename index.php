@@ -9,11 +9,19 @@ require_once('view/LoginView.php');
 require_once('view/DateTimeView.php');
 require_once('view/LayoutView.php');
 
-die(var_dump($_ENV));
-$DB_HOST = "mysql:host=127.0.0.1;dbname=1dv610-l2";
-$DB_USER = "root";
-$DB_PASSWORD = "roooooot";
-$DB_CONNECTION = new PDO($DB_HOST, $DB_USER, $DB_PASSWORD);
+if (!isset($_ENV['environment']) || $_ENV['environment'] != 'production') {
+    $_ENV['db_host'] = "127.0.0.1";
+    $_ENV['db_database'] = "1dv610-l2";
+    $_ENV['db_user'] = "root";
+    $_ENV['db_password'] = "roooooot";
+}
+
+$DB_HOST = $_ENV['db_host'];
+$DB_DATABASE = $_ENV['db_database'];
+$DB_USER = $_ENV['db_user'];
+$DB_PASSWORD = $_ENV['db_password'];
+
+$DB_CONNECTION = new PDO("mysql:host=$DB_HOST;dbname=$DB_DATABASE", $DB_USER, $DB_PASSWORD);
 
 //MAKE SURE ERRORS ARE SHOWN... MIGHT WANT TO TURN THIS OFF ON A PUBLIC SERVER
 error_reporting(E_ALL);
