@@ -4,7 +4,7 @@ class RegisterView {
     private static $name = 'RegisterView::UserName';
     private static $newPassword1 = 'RegisterView::Password';
     private static $newPassword2 = 'RegisterView::PasswordRepeat';
-    private static $register = 'RegisterView::RegisterButton';
+    private static $register = 'RegisterView::Register';
     private static $messageId = 'RegisterView::Message';
 
 
@@ -14,11 +14,9 @@ class RegisterView {
      * Should be called after a login attempt has been determined
      *
      * @param $tMessage
-     * @param $isLoggedIn
-     * @param $bRegister
      * @return  String
      */
-	public function response($tMessage, $isLoggedIn, $bRegister) {
+	public function response($tMessage) {
         return $this->generateRegisterFormHTML($tMessage)
             . $this->generateBackToLoginButtonHTML($tMessage);
 	}

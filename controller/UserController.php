@@ -2,7 +2,7 @@
 
 require_once('model/User.php');
 
-class LoginController {
+class UserController {
     public $oUser;
 
     public function __construct(PDO $oDB){
@@ -41,20 +41,20 @@ class LoginController {
 
     public function register() {
         $_SESSION['error'] = '';
-        $tUsername = $_POST['LoginView::UserName'] ?? '';
-        $tPassword1 = $_POST['LoginView::newPassword1'] ?? '';
-        $tPassword2 = $_POST['LoginView::newPassword2'] ?? '';
+        $tUsername = $_POST['RegisterView::UserName'] ?? '';
+        $tPassword1 = $_POST['RegisterView::Password'] ?? '';
+        $tPassword2 = $_POST['RegisterView::PasswordRepeat'] ?? '';
 
         if (empty(trim($tUsername))) {
             $_SESSION['error'] .= 'Username is missing<br>';
         }
 
-        if (empty(trim($tPassword1)) || empty(trim($tPassword2))) {
+        if (empty(trim($tPassword1)) && empty(trim($tPassword2))) {
             $_SESSION['error'] .= 'Password is missing<br>';
         }
 
         if (!($tPassword1 === $tPassword2)) {
-            $_SESSION['error'] .= 'Wrong name or password<br>';
+            $_SESSION['error'] .= 'Passwords do not match<br>';
         }
 
         if (!empty($_SESSION['error'])) {

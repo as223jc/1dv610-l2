@@ -2,9 +2,12 @@
 
 session_start();
 
+var_dump($_SESSION);
+
 //INCLUDE THE FILES NEEDED...
 require_once('model/User.php');
-require_once('controller/LoginController.php');
+require_once('controller/UserController.php');
+require_once('view/RegisterView.php');
 require_once('view/LoginView.php');
 require_once('view/DateTimeView.php');
 require_once('view/LayoutView.php');
@@ -31,23 +34,25 @@ ini_set('display_errors', 'On');
 
 //CREATE OBJECTS OF THE VIEWS
 $v = new LoginView();
+$rv = new RegisterView();
 $dtv = new DateTimeView();
 $lv = new LayoutView();
 $bIsLoggedIn = !empty($_SESSION['loggedIn']) && $_SESSION['loggedIn'] === true;
 
-$oLoginController = new LoginController($DB_CONNECTION);
+$oUserController = new UserController($DB_CONNECTION);
 
 if (!empty($_POST['LoginView::Logout'])) {
-    $oLoginController->logout();
+    $oUserController->logout();
 } else if (!empty($_POST['LoginView::Login'])) {
-    $oLoginController->login(isset($_POST['LoginView::KeepMeLoggedIn']));
-} else if (!empty($_POST['LoginView::Register'])) {
-    $oLoginController->register();
+    $oUserController->login(isset($_POST['LoginView::KeepMeLoggedIn']));
+} else if (!empty($_POST['RegisterView::Register'])) {
+    $oUserController->register();
 }
 
-$bRegister = isset($_POST['LoginView::RegisterButton']) || isset($_POST['LoginView::Register']);
+$bRegister = isset($_POST['RegisterView::Register']) || isset($_POST['LoginView::RegisterButton']);
+
 echo ($_SESSION['success'] ?? '');
-$lv->render($bIsLoggedIn, $v, $dtv, $_SESSION['error'] ?? '', $bRegister);
+$lv->render($bIsLoggedIn, $v, $dtv, $rv,$_SESSION['error'] ?? $_SESSION['success'] ?? '', $bRegister);
 
 $_SESSION['error'] = '';
 $_SESSION['success'] = '';
