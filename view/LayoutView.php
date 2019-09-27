@@ -1,10 +1,9 @@
 <?php
 
-
 class LayoutView {
 
   public function render($isLoggedIn, LoginView $v, DateTimeView $dtv, RegisterView $rv, $tMessage = '', $bRegister = false) {
-    $res = $bRegister ? $rv->response($tMessage) : $v->response($tMessage, $isLoggedIn, $bRegister);
+    $res = $bRegister ? $rv->response($tMessage) : $v->response($tMessage, $isLoggedIn);
     echo '<!DOCTYPE html>
       <html>
         <head>

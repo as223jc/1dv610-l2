@@ -23,13 +23,11 @@ class UserController {
 
         if ($this->userAuthenticated($tUsername, $tPassword)) {
             $_SESSION['loggedIn'] = true;
-            $_SESSION['success'] = "Welcome";
+            $_SESSION['error'] = "Welcome";
 
             if ($bRememberMe) {
                 setcookie( 'rememberMe', true, time() + 3600 * 24 * 30 );
             }
-
-            header("location: index.php");
         } else {
             $_SESSION['error'] = 'Wrong name or password<br>';
         }
@@ -54,16 +52,15 @@ class UserController {
 
         if ($this->createUser($tUsername, $tPassword1)) {
             $_SESSION['success'] = 'User created successfully';
-            header("location: index.php");
         } else {
             $_SESSION['error'] = 'Username already exists';
         }
     }
 
     public function logout() {
-        $_SESSION['success'] = 'You are now logged out';
-        $_SESSION['loggedIn'] = false;
-        header("location: index.php");
+        session_destroy();
+        session_start();
+        //        $_SESSION['success'] = 'You are now logged out';
     }
 
     private function userAuthenticated($tUsername, $tPassword){

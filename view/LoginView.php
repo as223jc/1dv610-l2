@@ -19,10 +19,9 @@ class LoginView {
      *
      * @param $tMessage
      * @param $isLoggedIn
-     * @param $bRegister
      * @return  String
      */
-    public function response($tMessage, $isLoggedIn, $bRegister) {
+    public function response($tMessage, $isLoggedIn) {
         return !$isLoggedIn
             ? $this->generateLoginFormHTML($tMessage) . $this->generateRegisterButtonHTML()
             : $this->generateLogoutButtonHTML($tMessage);

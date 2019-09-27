@@ -22,8 +22,6 @@ $DB_DATABASE = $_ENV['db_database'];
 $DB_USER = $_ENV['db_user'];
 $DB_PASSWORD = $_ENV['db_password'];
 
-//die(var_dump($_ENV));
-
 $DB_CONNECTION = new PDO("mysql:host=$DB_HOST;dbname=$DB_DATABASE", $DB_USER, $DB_PASSWORD);
 
 //MAKE SURE ERRORS ARE SHOWN... MIGHT WANT TO TURN THIS OFF ON A PUBLIC SERVER
@@ -35,7 +33,6 @@ $v = new LoginView();
 $rv = new RegisterView();
 $dtv = new DateTimeView();
 $lv = new LayoutView();
-$bIsLoggedIn = !empty($_SESSION['loggedIn']) && $_SESSION['loggedIn'] === true;
 
 $oUserController = new UserController($DB_CONNECTION);
 
@@ -47,9 +44,13 @@ if (!empty($_POST['LoginView::Logout'])) {
     $oUserController->register();
 }
 
+$bIsLoggedIn = !empty($_SESSION['loggedIn']) && $_SESSION['loggedIn'] === true;
 $bRegister = isset($_POST['RegisterView::Register']) || isset($_POST['LoginView::RegisterButton']);
 
-$lv->render($bIsLoggedIn, $v, $dtv, $rv,$_SESSION['error'] ?? $_SESSION['success'] ?? '', $bRegister);
+$tMessage = !empty($_SESSION['error']) ? $_SESSION['error'] :
+    (!empty($_SESSION['success']) ? $_SESSION['success'] : 'asd');
+
+$lv->render($bIsLoggedIn, $v, $dtv, $rv, $tMessage, $bRegister);
 
 $_SESSION['error'] = '';
 $_SESSION['success'] = '';
