@@ -49,7 +49,7 @@ if (isset($_POST['LoginView::Logout'])) {
 }
 
 $bIsLoggedIn = !empty($_SESSION['loggedIn']) && $_SESSION['loggedIn'] === true;
-$bRegister = isset($_POST['RegisterView::Register']) || isset($_POST['LoginView::RegisterButton']);
+$bRegister = isset($_GET['register']) ||isset($_POST['RegisterView::Register']) || isset($_POST['LoginView::RegisterButton']);
 
 $tMessage = !empty($_SESSION['error']) ? $_SESSION['error'] :
     (!empty($_SESSION['success']) ? $_SESSION['success'] : '');

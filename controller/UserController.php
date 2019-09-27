@@ -54,9 +54,9 @@ class UserController {
         }
 
         if ($this->createUser($tUsername, $tPassword1)) {
-            $_SESSION['success'] = 'User created successfully';
+            $_SESSION['success'] = 'Registered new user';
         } else {
-            $_SESSION['error'] = 'Username already exists';
+            $_SESSION['error'] = 'User exists, pick another username.';
         }
     }
 
