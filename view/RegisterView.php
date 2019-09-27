@@ -43,7 +43,7 @@ class RegisterView {
 					<p id="' . self::$messageId . '">' . $message . '</p>
 					
 					<label for="' . self::$name . '">Username :</label>
-					<input type="text" id="' . self::$name . '" name="' . self::$name . '" value="" />
+					<input type="text" id="' . self::$name . '" name="' . self::$name . '" value="' . $this->getRequestUserName() . '" />
 
 					<label for="' . self::$newPassword1 . '">Password :</label>
 					<input type="password" id="' . self::$newPassword1 . '" name="' . self::$newPassword1 . '" />
@@ -59,7 +59,6 @@ class RegisterView {
 
 	//CREATE GET-FUNCTIONS TO FETCH REQUEST VARIABLES
 	private function getRequestUserName() {
-		//RETURN REQUEST VARIABLE: USERNAME
+		return strip_tags($_POST['RegisterView::UserName'] ?? '');
 	}
-
 }

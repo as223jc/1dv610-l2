@@ -80,7 +80,7 @@ class LoginView {
     }
 
     private function getRequestUserName() {
-        return $_POST['LoginView::UserName'] ?? '';
+        return strip_tags($_POST['LoginView::UserName'] ?? '');
     }
 
 }

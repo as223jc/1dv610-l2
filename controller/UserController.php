@@ -14,10 +14,10 @@ class UserController {
         $tPassword = $_POST['LoginView::Password'] ?? '';
 
         if (empty(trim($tUsername))) {
-            $_SESSION['error'] = 'Username is missing<br>';
+            $_SESSION['error'] = 'Username is missing';
             return;
         } else if (empty(trim($tPassword))) {
-            $_SESSION['error'] = 'Password is missing<br>';
+            $_SESSION['error'] = 'Password is missing';
             return;
         }
 
@@ -38,12 +38,16 @@ class UserController {
         $tPassword1 = $_POST['RegisterView::Password'] ?? '';
         $tPassword2 = $_POST['RegisterView::PasswordRepeat'] ?? '';
 
-        if (empty(trim($tUsername))) {
-            $_SESSION['error'] = 'Username is missing<br>';
-        } else if (empty(trim($tPassword1)) && empty(trim($tPassword2))) {
-            $_SESSION['error'] = 'Password is missing<br>';
+        if (empty(trim($tUsername) || strlen($tUsername) < 3)) {
+            $_SESSION['error'] = 'Username has too few characters, at least 3 characters.';
+        } else if (!preg_match('/[^A-Za-z$]/', $tUsername)) {
+            $_SESSION['error'] = 'Username contains invalid characters.';
+        }  else if (empty(trim($tPassword1)) && empty(trim($tPassword2))) {
+            $_SESSION['error'] = 'Password is missing.';
+        } else if (strlen($tPassword1) < 6) {
+            $_SESSION['error'] = 'Password has too few characters, at least 6 characters.';
         } else if (!($tPassword1 === $tPassword2)) {
-            $_SESSION['error'] = 'Passwords do not match<br>';
+            $_SESSION['error'] = 'Passwords do not match.';
         }
 
         if (!empty($_SESSION['error'])) {
@@ -60,7 +64,7 @@ class UserController {
     public function logout() {
         session_destroy();
         session_start();
-        //        $_SESSION['success'] = 'You are now logged out';
+        $_SESSION['success'] = 'Bye bye!';
     }
 
     private function userAuthenticated($tUsername, $tPassword){
