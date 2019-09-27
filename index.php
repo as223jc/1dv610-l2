@@ -9,7 +9,7 @@ require_once('view/LoginView.php');
 require_once('view/DateTimeView.php');
 require_once('view/LayoutView.php');
 
-if (!isset($_ENV['ENVIRONMENT']) || $_ENV['environment'] != 'production') {
+if (!isset($_ENV['ENVIRONMENT']) || $_ENV['ENVIRONMENT'] != 'production') {
     $_ENV['db_host'] = "127.0.0.1";
     $_ENV['db_database'] = "1dv610-l2";
     $_ENV['db_user'] = "root";
