@@ -4,6 +4,7 @@ require_once('model/User.php');
 
 class UserController {
     public $oUser;
+    public $tMessage;
 
     public function __construct(PDO $oDB){
         $this->oUser = new User($oDB);
@@ -14,23 +15,27 @@ class UserController {
         $tPassword = $_POST['LoginView::Password'] ?? '';
 
         if (empty(trim($tUsername))) {
-            $_SESSION['error'] = 'Username is missing';
+            $this->tMessage = 'Username is missing';
             return;
         } else if (empty(trim($tPassword))) {
-            $_SESSION['error'] = 'Password is missing';
+            $this->tMessage = 'Password is missing';
             return;
         }
 
         if ($this->userAuthenticated($tUsername, $tPassword)) {
             $_SESSION['loggedIn'] = true;
-            $_SESSION['success'] = "Welcome";
+            $this->tMessage = "Welcome";
 
             if ($bRememberMe) {
-                setcookie( 'rememberMe', true, time() + 3600 * 24 * 30 );
+                $this->tMessage = "Welcome and you will be remembered";
+                $tPasswordToken = md5($tUsername . time());
+                $this->oUser->saveRememberToken($tUsername, $tPasswordToken);
+                setcookie( 'username', $tUsername);
+                setcookie( 'password', $tPasswordToken);
             }
 
         } else {
-            $_SESSION['error'] = 'Wrong name or password<br>';
+            $this->tMessage = 'Wrong name or password<br>';
         }
     }
 
@@ -40,30 +45,34 @@ class UserController {
         $tPassword2 = $_POST['RegisterView::PasswordRepeat'] ?? '';
 
         if (empty(trim($tUsername)) || strlen($tUsername) < 3) {
-            $_SESSION['error'] = 'Username has too few characters, at least 3 characters.';
+            $this->tMessage = 'Username has too few characters, at least 3 characters.';
         } else if (!preg_match('/[A-Za-z]/', $tUsername)) {
-            $_SESSION['error'] = 'Username contains invalid characters.';
+            $this->tMessage = 'Username contains invalid characters.';
         }  else if (empty(trim($tPassword1)) && empty(trim($tPassword2)) || strlen($tPassword1) < 6) {
-            $_SESSION['error'] = 'Password has too few characters, at least 6 characters.';
+            $this->tMessage = 'Password has too few characters, at least 6 characters.';
         } else if (!($tPassword1 === $tPassword2)) {
-            $_SESSION['error'] = 'Passwords do not match.';
+            $this->tMessage = 'Passwords do not match.';
         }
 
-        if (!empty($_SESSION['error'])) {
-            return;
+        if (!empty($this->tMessage)) {
+            return false;
         }
 
         if ($this->createUser($tUsername, $tPassword1)) {
-            $_SESSION['success'] = 'Registered new user';
+            $this->tMessage = 'Registered new user';
+            return true;
         } else {
-            $_SESSION['error'] = 'User exists, pick another username.';
+            $this->tMessage = 'User exists, pick another username.';
+            return false;
         }
     }
 
     public function logout() {
         session_destroy();
+        setcookie( 'username', '');
+        setcookie( 'password', '');
         session_start();
-        $_SESSION['success'] = 'Bye bye!';
+        $this->tMessage = 'Bye bye!';
     }
 
     private function userAuthenticated($tUsername, $tPassword){
@@ -75,5 +84,14 @@ class UserController {
     public function createUser($tUsername, $tPassword) {
         $tPassword = password_hash($tPassword, PASSWORD_BCRYPT);
         return $this->oUser->createUser($tUsername, $tPassword);
+    }
+
+    public function authWithToken($tUsername, $tToken) {
+        if (!$this->oUser->checkRememberToken($tUsername, $tToken)) {
+            $this->tMessage = 'Wrong information in cookies';
+        } else {
+            $_SESSION['loggedIn'] = true;
+            $this->tMessage = "Welcome back with cookie";
+        }
     }
 }

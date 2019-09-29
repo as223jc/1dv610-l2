@@ -36,25 +36,24 @@ $lv = new LayoutView();
 
 $oUserController = new UserController($DB_CONNECTION);
 
-if (isset($_POST['LoginView::Logout'])) {
+
+if ((empty($_SESSION['loggedIn']) || $_SESSION['loggedIn'] === false) && isset($_COOKIE['username']) && isset($_COOKIE['password'])) {
+    $oUserController->authWithToken($_COOKIE['username'], $_COOKIE['password']);
+} else if (isset($_POST['LoginView::Logout'])) {
     $oUserController->logout();
-//    header('location: index.php');
-//    exit;
 } else if (isset($_POST['LoginView::Login'])) {
     $oUserController->login(isset($_POST['LoginView::KeepMeLoggedIn']));
-//    header('location: index.php');
-//    exit;
 } else if (isset($_POST['RegisterView::Register'])) {
-    $oUserController->register();
+    $bNewRegistration = $oUserController->register();
 }
 
 $bIsLoggedIn = !empty($_SESSION['loggedIn']) && $_SESSION['loggedIn'] === true;
 $bRegister = isset($_GET['register']) ||isset($_POST['RegisterView::Register']) || isset($_POST['LoginView::RegisterButton']);
 
-$tMessage = !empty($_SESSION['error']) ? $_SESSION['error'] :
-    (!empty($_SESSION['success']) ? $_SESSION['success'] : '');
+//$tMessage = !empty($_SESSION['error']) ? $_SESSION['error'] :
+//    (!empty($_SESSION['success']) ? $_SESSION['success'] : '');
 
-$lv->render($bIsLoggedIn, $v, $dtv, $rv, $tMessage, $bRegister);
+$lv->render($bIsLoggedIn, $v, $dtv, $rv, $oUserController->tMessage, isset($bNewRegistration) ? $bNewRegistration : $bRegister);
 
 unset($_SESSION['error']);
 unset($_SESSION['success']);
