@@ -1,9 +1,13 @@
 <?php
 
+namespace startup\model;
+
+use DB;
+
 class User {
     public $oDB;
 
-    public function __construct($oDB) {
+    public function __construct(DB $oDB) {
         $this->oDB = $oDB;
     }
 

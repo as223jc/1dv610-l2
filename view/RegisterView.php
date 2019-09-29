@@ -1,6 +1,8 @@
 <?php
 
-class RegisterView {
+namespace startup\view;
+
+class RegisterView extends LayoutView {
     private static $name = 'RegisterView::UserName';
     private static $newPassword1 = 'RegisterView::Password';
     private static $newPassword2 = 'RegisterView::PasswordRepeat';
@@ -16,7 +18,7 @@ class RegisterView {
      * @param $tMessage
      * @return  String
      */
-	public function response($tMessage) {
+	public function response($tMessage): string {
         return $this->generateRegisterFormHTML($tMessage)
             . $this->generateBackToLoginButtonHTML($tMessage);
 	}
@@ -26,7 +28,7 @@ class RegisterView {
 	* @param $message, String output message
 	* @return  String
 	*/
-	private function generateBackToLoginButtonHTML($message) {
+	private function generateBackToLoginButtonHTML($message): string {
 		return '<a href=".">Back to login</a>';
 	}
 
@@ -35,7 +37,7 @@ class RegisterView {
      * @param $message, String output message
      * @return  String
 	*/
-	private function generateRegisterFormHTML($message) {
+	private function generateRegisterFormHTML($message): string {
 		return '
 			<form method="post" > 
 				<fieldset>
@@ -58,7 +60,21 @@ class RegisterView {
 	}
 
 	//CREATE GET-FUNCTIONS TO FETCH REQUEST VARIABLES
-	private function getRequestUserName() {
+	private function getRequestUserName(): string {
 		return strip_tags($_POST['RegisterView::UserName'] ?? '');
 	}
+
+	//CREATE GET-FUNCTIONS TO FETCH REQUEST VARIABLES
+	private function getRequestPassword(): string {
+		return strip_tags($_POST['RegisterView::Password'] ?? '');
+	}
+
+	//CREATE GET-FUNCTIONS TO FETCH REQUEST VARIABLES
+	private function getRequestPasswordRepeat(): string {
+		return strip_tags($_POST['RegisterView::PasswordRepeat'] ?? '');
+	}
+
+    protected function view() {
+        // TODO: Implement view() method.
+    }
 }
