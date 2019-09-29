@@ -30,8 +30,8 @@ class UserController {
                 $this->tMessage = "Welcome and you will be remembered";
                 $tPasswordToken = md5($tUsername . time());
                 $this->oUser->saveRememberToken($tUsername, $tPasswordToken);
-                setcookie( 'username', $tUsername);
-                setcookie( 'password', $tPasswordToken);
+                setcookie( 'LoginView::CookieName', $tUsername);
+                setcookie( 'LoginView::CookiePassword', $tPasswordToken);
             }
 
         } else {
@@ -45,13 +45,15 @@ class UserController {
         $tPassword2 = $_POST['RegisterView::PasswordRepeat'] ?? '';
 
         if (empty(trim($tUsername)) || strlen($tUsername) < 3) {
-            $this->tMessage = 'Username has too few characters, at least 3 characters.';
-        } else if (!preg_match('/[A-Za-z]/', $tUsername)) {
-            $this->tMessage = 'Username contains invalid characters.';
-        }  else if (empty(trim($tPassword1)) && empty(trim($tPassword2)) || strlen($tPassword1) < 6) {
-            $this->tMessage = 'Password has too few characters, at least 6 characters.';
+            $this->tMessage = 'Username has too few characters, at least 3 characters.<br>';
+        } else if (!preg_match('/^[a-zA-Z]+$/', $tUsername)) {
+            $this->tMessage = 'Username contains invalid characters.<br>';
+        }
+
+        if (empty(trim($tPassword1)) && empty(trim($tPassword2)) || strlen($tPassword1) < 6) {
+            $this->tMessage .= 'Password has too few characters, at least 6 characters.<br>';
         } else if (!($tPassword1 === $tPassword2)) {
-            $this->tMessage = 'Passwords do not match.';
+            $this->tMessage .= 'Passwords do not match.<br>';
         }
 
         if (!empty($this->tMessage)) {
@@ -59,7 +61,7 @@ class UserController {
         }
 
         if ($this->createUser($tUsername, $tPassword1)) {
-            $this->tMessage = 'Registered new user';
+            $this->tMessage = 'Registered new user.';
             $_POST['LoginView::UserName'] = $tUsername;
             return true;
         } else {
@@ -70,8 +72,8 @@ class UserController {
 
     public function logout() {
         session_destroy();
-        setcookie( 'username', '');
-        setcookie( 'password', '');
+        setcookie( 'LoginView::CookieName', '');
+        setcookie( 'LoginView::CookiePassword', '');
         session_start();
         $this->tMessage = 'Bye bye!';
     }
@@ -90,6 +92,8 @@ class UserController {
     public function authWithToken($tUsername, $tToken) {
         if (!$this->oUser->checkRememberToken($tUsername, $tToken)) {
             $this->tMessage = 'Wrong information in cookies';
+            setcookie( 'LoginView::CookieName', '');
+            setcookie( 'LoginView::CookiePassword', '');
         } else {
             $_SESSION['loggedIn'] = true;
             $this->tMessage = "Welcome back with cookie";
