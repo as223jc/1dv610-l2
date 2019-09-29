@@ -53,7 +53,7 @@ $bRegister = isset($_GET['register']) ||isset($_POST['RegisterView::Register']) 
 //$tMessage = !empty($_SESSION['error']) ? $_SESSION['error'] :
 //    (!empty($_SESSION['success']) ? $_SESSION['success'] : '');
 
-$lv->render($bIsLoggedIn, $v, $dtv, $rv, $oUserController->tMessage, isset($bNewRegistration) ? $bNewRegistration : $bRegister);
+$lv->render($bIsLoggedIn, $v, $dtv, $rv, $oUserController->tMessage, isset($bNewRegistration) ? !$bNewRegistration : $bRegister);
 
 unset($_SESSION['error']);
 unset($_SESSION['success']);

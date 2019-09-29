@@ -60,6 +60,7 @@ class UserController {
 
         if ($this->createUser($tUsername, $tPassword1)) {
             $this->tMessage = 'Registered new user';
+            $_POST['LoginView::UserName'] = $tUsername;
             return true;
         } else {
             $this->tMessage = 'User exists, pick another username.';
