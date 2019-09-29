@@ -1,5 +1,6 @@
 <?php
 
+date_default_timezone_set("Europe/Stockholm");
 session_start();
 
 //INCLUDE THE FILES NEEDED...

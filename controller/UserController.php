@@ -46,7 +46,7 @@ class UserController {
 
         if (empty(trim($tUsername)) || strlen($tUsername) < 3) {
             $this->tMessage = 'Username has too few characters, at least 3 characters.<br>';
-        } else if (!preg_match('/^[a-zA-Z]+$/', $tUsername)) {
+        } else if (!preg_match('/^[a-zA-Z1-9]+$/', $tUsername)) {
             $this->tMessage = 'Username contains invalid characters.<br>';
         }
 
