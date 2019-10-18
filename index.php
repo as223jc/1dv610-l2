@@ -1,9 +1,9 @@
 <?php
 
-require_once('../autoload.php');
-require_once('../bootstrap.php');
-require_once('../global_functions.php');
-require_once('../routes/routes.php');
+require_once('autoload.php');
+require_once('bootstrap.php');
+require_once('global_functions.php');
+require_once('routes/routes.php');
 
 //$oContainer = new Container();
 
