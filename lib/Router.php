@@ -18,7 +18,7 @@ class Router {
         $this->routes['POST'][$tRoute] = $tEndPoint;
     }
 
-    public function matchRoute(Request $oRequest) {
+    public function resolveRoute(Request $oRequest) {
         $tRequestedRoute = $oRequest->getRoute();
         $tRequestedMethod = $oRequest->getMethod();
 

@@ -5,8 +5,6 @@ namespace startup\controller;
 use Request;
 use startup\model\User;
 use startup\service\Auth;
-use startup\view\DateTimeView;
-use startup\view\LayoutView;
 use startup\view\LoginView;
 
 class LoginController {
@@ -19,95 +17,37 @@ class LoginController {
         $this->oLoginView = $oLoginView;
     }
 
-    public function index(LoginView $oLoginView) {
-        $tMessage = $_SESSION['message'] ?? '';
+    /* Route GET /login */
+    public function index(Auth $oAuth, LoginView $oLoginView) {
+        if ($oAuth->isAuthenticated()) {
+            redirect('/');
+        }
 
-        return $oLoginView->render('axaxax');
+        return $oLoginView->render();
     }
 
-    public function login(Request $oRequest, Auth $oAuth) {
-        $tUsername = $oRequest->post('LoginView::UserName');
-        $tPassword = $oRequest->post('LoginView::Password');
-        $bRememberMe = $oRequest->post('LoginView::RememberMe');
+    /* Route POST /login */
+    public function login(Request $oRequest, Auth $oAuth, LoginView $oLoginView) {
+        $tUsername = $oRequest->{$oLoginView->getNameId()};
+        $tPassword = $oRequest->{$oLoginView->getPasswordId()};
+        $bRememberMe = $oRequest->{$oLoginView->getRememberMeId()};
 
-        if (!$this->validateHandle($tUsername, $tPassword)) {
+        if (!$this->validateCredentials($tUsername, $tPassword) ||
+            !$oAuth->authenticate($tUsername, $tPassword, $bRememberMe)) {
             redirect('login');
         }
-//
-//        if (empty(trim($tUsername))) {
-//            $this->tMessage = 'Username is missing';
-//            return;
-//        } else if (empty(trim($tPassword))) {
-//            $this->tMessage = 'Password is missing';
-//            return;
-//        }
 
-        if (!$oAuth->authenticate($tUsername, $tPassword, $bRememberMe)) {
-            redirect('login');
-        }
-dd($_SERVER);
-        redirect('');
-
-//        dd($tUsername, $tPassword);
-//
-//        if ($this->userAuthenticated($tUsername, $tPassword)) {
-//            $_SESSION['loggedIn'] = true;
-//            $_SESSION['agent'] = md5($_SERVER['HTTP_USER_AGENT']);
-//
-//            $this->tMessage = "Welcome";
-//
-//            if ($bRememberMe) {
-//                $this->tMessage = "Welcome and you will be remembered";
-//                $tPasswordToken = md5($tUsername . time());
-//                $this->oUser->saveRememberToken($tUsername, $tPasswordToken);
-//                setcookie( 'LoginView::CookieName', $tUsername);
-//                setcookie( 'LoginView::CookiePassword', $tPasswordToken);
-//            }
-//
-//        } else {
-//            $this->tMessage = 'Wrong name or password<br>';
-//        }
+        /* Successful login - redirect back home */
+        redirect('/');
     }
 
-    public function logout() {
-        session_destroy();
-        setcookie( 'LoginView::CookieName', '');
-        setcookie( 'LoginView::CookiePassword', '');
-        session_start();
-        flash('logout', 'Bye bye!');
-        echo "Hej";
-        redirect('');
-        echo "Då";
-//        $this->tMessage = 'Bye bye!';
-    }
-
-    private function userAuthenticated($tUsername, $tPassword){
-        $oUser = $this->oUser->getByUsername($tUsername);
-
-        return $oUser && password_verify($tPassword, $oUser['password']);
-    }
-
-    public function authWithToken($tUsername, $tToken) {
-        if (!$this->oUser->checkRememberToken($tUsername, $tToken)) {
-            setcookie( 'LoginView::CookieName', '');
-            setcookie( 'LoginView::CookiePassword', '');
-            $this->tMessage = 'Wrong information in cookies';
-        } else {
-            $_SESSION['loggedIn'] = true;
-            $this->tMessage = "Welcome back with cookie";
-        }
-    }
-
-    public function getMessage() {
-        return $this->tMessage;
-    }
-
-    private function renderView() {
-
+    /* Route GET /logout */
+    public function logout(Auth $oAuth) {
+        $oAuth->logOut();
     }
 
     /* Validate login handle */
-    private function validateHandle($tUsername, $tPassword) {
+    private function validateCredentials($tUsername, $tPassword) {
         if (empty(trim($tUsername))) {
             flash('username', 'Username is missing');
         }

@@ -2,34 +2,31 @@
 
 namespace startup\model;
 
-use DB;
+class User extends Model {
+    protected $tTableName = 'users';
 
-class User {
-    public $oDB;
-
-    public function __construct(DB $oDB) {
-        $this->oDB = $oDB;
-    }
-
-    public function getByUsername($tUsername) {
-        $stmt = $this->oDB->prepare('SELECT * FROM users WHERE username = ?');
-        $stmt->execute([$tUsername]);
-        return $stmt->fetch();
-    }
-
-    public function createUser($tUsername, $tPassword) {
-        $stmt = $this->oDB->prepare('INSERT INTO users (username, password) VALUES (?, ?)');
-        return $stmt->execute([$tUsername, $tPassword]);
+    public function checkRememberToken($tUsername, $tToken) {
+        return !!$this->findWhere([
+            ['username', '=', $tUsername],
+            ['remember_me', '=', $tToken],
+        ]);
     }
 
     public function saveRememberToken($tUsername, $tPasswordToken) {
-        $stmt = $this->oDB->prepare('UPDATE users SET remember_me = ? WHERE username = ?');
-        return $stmt->execute([$tPasswordToken, $tUsername]);
+        return $this->update(['remember_me' => $tPasswordToken], [['username', '=', $tUsername]]);
     }
 
-    public function checkRememberToken($tUsername, $tToken) {
-        $stmt = $this->oDB->prepare('SELECT * FROM users WHERE username = ? AND remember_me = ?');
-        $stmt->execute([$tUsername, $tToken]);
-        return $stmt->fetch();
+    public function getByUsername($tUsername) {
+        $aUsers = $this->findWhere([['username', '=', $tUsername]]);
+
+        return !empty($aUsers) ? $aUsers[0] : false;
+    }
+
+    public function createUser($tUsername, $tPassword) {
+        return $this->insert(['username' => $tUsername, 'password' => $tPassword]);
+    }
+
+    public function allUsers() {
+        return $this->all(['id', 'username']);
     }
 }

@@ -11,7 +11,7 @@ class Request {
     /* Allows anything from the $_SERVER global to be retrieved directly from the request */
     public function __get($name) {
         if(array_key_exists($name, $this->all())) {
-            return $this->data[$name];
+            return $this->all()[$name];
         }
         return null;
     }
@@ -77,5 +77,10 @@ class Request {
         }
 
         return $_POST;
+    }
+
+    public function __call($name, $arguments) {
+        dd($name, $arguments);
+        // TODO: Implement __call() method.
     }
 }

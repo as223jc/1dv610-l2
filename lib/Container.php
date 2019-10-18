@@ -1,15 +1,13 @@
 <?php
 
-/* Class dependency resolver - PSR-11: Container interface */
+/* Class dependency resolver - used to resolve classes using reflection (Dependency injection) */
 class Container {
     protected $aClasses = [];
+
     /**
      * Finds an entry of the container by its identifier and returns it.
      *
-     * @param string $id Identifier of the entry to look for.
-     *
-     * @throws \Exception
-     *
+     * @param $tName
      * @return mixed Entry.
      */
     public function get($tName) {
@@ -27,9 +25,8 @@ class Container {
      * `has($id)` returning true does not mean that `get($id)` will not throw an exception.
      * It does however mean that `get($id)` will not throw a `NotFoundExceptionInterface`.
      *
-     * @param string $id Identifier of the entry to look for.
-     *
-     * @return bool
+     * @param $tName
+     * @return void
      */
     public function set($tName) {
         $this->aClasses[$tName] = $tName;

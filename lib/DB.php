@@ -1,7 +1,7 @@
 <?php
 
 class DB {
-    private $oPDO;
+    protected $oDB;
 
     public function __construct() {
         if (!isset($_ENV['ENVIRONMENT']) || $_ENV['ENVIRONMENT'] != 'production') {
@@ -16,14 +16,14 @@ class DB {
         $DB_USER = $_ENV['db_user'];
         $DB_PASSWORD = $_ENV['db_password'];
 
-        $this->oPDO = new PDO("mysql:host=$DB_HOST;dbname=$DB_DATABASE", $DB_USER, $DB_PASSWORD);
+        $this->oDB = new PDO("mysql:host=$DB_HOST;dbname=$DB_DATABASE", $DB_USER, $DB_PASSWORD);
     }
 
     public function __call($name, $arguments) {
-        if (!method_exists($this->oPDO, $name)) {
+        if (!method_exists($this->oDB, $name)) {
             throw new \Exception('Method does not exist');
         }
 
-        return $this->oPDO->$name(...$arguments);
+        return $this->oDB->$name(...$arguments);
     }
 }

@@ -11,7 +11,7 @@ abstract class LayoutView {
         $this->dtv = $dtv;
     }
 
-    public function render($tMessage = '') {
+    public function render() {
         return "<!DOCTYPE html>
       <html lang='sv'>
         <head>
@@ -19,8 +19,9 @@ abstract class LayoutView {
           <title>Login Example</title>
         </head>
         <body>
-          <h1>Assignment 2</h1>
+          <h1>Assignment 3</h1>
          {$this->view()}
+         {$this->dtv->show()}
          </body>
       </html>
     ";
