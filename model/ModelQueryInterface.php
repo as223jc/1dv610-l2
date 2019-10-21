@@ -1,5 +1,7 @@
 <?php
 
+namespace startup\model;
+
 interface ModelQueryInterface {
     /**
      * Find a matching row by PK

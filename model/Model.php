@@ -3,7 +3,6 @@
 namespace startup\model;
 
 use DB;
-use ModelQueryInterface;
 
 abstract class Model implements ModelQueryInterface {
     protected $oDB;
